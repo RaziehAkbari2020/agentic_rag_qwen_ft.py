@@ -251,7 +251,7 @@ def build_graph_from_documents(docs: List[Document]):
         msg = response_model.bind_tools([retriever_tool]).invoke(messages_with_system)
 
         if getattr(msg, "tool_calls", None):
-        return {"messages": [msg]}
+           return {"messages": [msg]}
 
         question = get_last_human_text(messages)
 
@@ -264,7 +264,7 @@ def build_graph_from_documents(docs: List[Document]):
         )
 
         qwen_response = answer_model.invoke(
-        [{"role": "user", "content": prompt}]
+            [{"role": "user", "content": prompt}]
         )
 
         return {"messages": [qwen_response]}
