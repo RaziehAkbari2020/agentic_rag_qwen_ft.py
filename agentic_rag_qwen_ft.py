@@ -245,29 +245,29 @@ def build_graph_from_documents(docs: List[Document]):
     # Nodes
     # -----------------------------
     def generate_query_or_respond(state: MessagesState):
-    messages = state["messages"]
-    messages_with_system = [SystemMessage(content=SYSTEM_PROMPT), *messages]
+        messages = state["messages"]
+        messages_with_system = [SystemMessage(content=SYSTEM_PROMPT), *messages]
 
-    msg = response_model.bind_tools([retriever_tool]).invoke(messages_with_system)
+        msg = response_model.bind_tools([retriever_tool]).invoke(messages_with_system)
 
-    if getattr(msg, "tool_calls", None):
+        if getattr(msg, "tool_calls", None):
         return {"messages": [msg]}
 
-    question = get_last_human_text(messages)
+        question = get_last_human_text(messages)
 
-    prompt = (
+        prompt = (
         "You are an Agile assistant specialized in task planning and analysis.\n"
         "Answer the user question using your learned task-planning knowledge.\n"
         "If the question requires project-specific data that is not available, say that the data is not provided.\n"
         "Provide a concise but structured answer.\n"
         f"Question: {question}"
-    )
+        )
 
-    qwen_response = answer_model.invoke(
+        qwen_response = answer_model.invoke(
         [{"role": "user", "content": prompt}]
-    )
+        )
 
-    return {"messages": [qwen_response]}
+        return {"messages": [qwen_response]}
 
     def grade_documents(state: MessagesState) -> Literal["generate_answer", "rewrite_question"]:
         question = get_last_human_text(state["messages"])
