@@ -232,10 +232,10 @@ def build_graph_from_documents(docs: List[Document]):
 
     # Qwen fine-tuned model is used only for final answer generation
     answer_model = ChatOpenAI(
-        model="qwen-ft",
-        temperature=0,
-        api_key="EMPTY",
-        base_url="http://localhost:8000/v1",
+    model="qwen-ft",
+    temperature=0,
+    api_key="EMPTY",
+    base_url="https://60cllshh68mw57-8000.proxy.runpod.net/v1",
     )
 
     response_model = control_model
