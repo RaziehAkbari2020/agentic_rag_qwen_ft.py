@@ -7,3 +7,8 @@ langgraph
 pydantic
 tiktoken
 openai
+torch
+transformers
+peft
+accelerate
+sentencepiece
