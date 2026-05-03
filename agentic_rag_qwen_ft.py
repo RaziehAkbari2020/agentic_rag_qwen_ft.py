@@ -231,7 +231,7 @@ def build_graph_from_documents(docs: List[Document]):
        model="qwen-ft",
        temperature=0,
        api_key="EMPTY",
-       base_url="https://tj72kwahr979ja-7860.proxy.runpod.net/v1",
+       base_url="http://127.0.0.1:7860/v1",
     )
     response_model = control_model
     grader_model = control_model
