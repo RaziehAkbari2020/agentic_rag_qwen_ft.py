@@ -228,8 +228,8 @@ def build_graph_from_documents(docs: List[Document]):
     # Models
     # -----------------------------
     # OpenAI controls tool decision, grading, and rewriting
-    control_model = init_chat_model("gpt-4.1", temperature=0)
-
+    control_model = init_chat_model("gpt-4o-mini", temperature=0)
+    
     # Qwen fine-tuned model is used only for final answer generation
     answer_model = ChatOpenAI(
     model="qwen-ft",
