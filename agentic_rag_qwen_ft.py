@@ -200,7 +200,54 @@ def get_last_human_text(messages) -> str:
             return m.content
     return messages[0].content if messages else ""
 
+BASE_MODEL = "Qwen/Qwen3-0.6B"
+LORA_MODEL = "Razieh87/AgileTaskGen-Agent-Qwen3-0.6B"
 
+
+@st.cache_resource(show_spinner=True)
+def load_qwen_ft_model():
+    tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL, trust_remote_code=True)
+
+    base_model = AutoModelForCausalLM.from_pretrained(
+        BASE_MODEL,
+        torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
+        device_map="auto",
+        trust_remote_code=True,
+    )
+
+    model = PeftModel.from_pretrained(base_model, LORA_MODEL)
+    model.eval()
+
+    return tokenizer, model
+
+
+class QwenFTAnswerModel:
+    def invoke(self, messages):
+        tokenizer, model = load_qwen_ft_model()
+
+        if isinstance(messages[-1], dict):
+            user_prompt = messages[-1]["content"]
+        else:
+            user_prompt = messages[-1].content
+
+        inputs = tokenizer(user_prompt, return_tensors="pt").to(model.device)
+
+        with torch.no_grad():
+            outputs = model.generate(
+                **inputs,
+                max_new_tokens=512,
+                do_sample=False,
+                pad_token_id=tokenizer.eos_token_id,
+            )
+
+        text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+        if user_prompt in text:
+            answer = text.replace(user_prompt, "").strip()
+        else:
+            answer = text.strip()
+
+        return AIMessage(content=answer)
 @st.cache_resource(show_spinner=False)
 def build_graph_from_documents(docs: List[Document]):
 
