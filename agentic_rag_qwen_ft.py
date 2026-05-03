@@ -26,6 +26,7 @@ from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.checkpoint.memory import MemorySaver
 
 
+
 # -----------------------------
 # Streamlit page config
 # -----------------------------
@@ -227,12 +228,11 @@ def build_graph_from_documents(docs: List[Document]):
 
     # Qwen FT generates ALL final answers
     answer_model = ChatOpenAI(
-        model="qwen-ft",
-        temperature=0,
-        api_key="EMPTY",
-        base_url="https://60cllshh68mw57-8000.proxy.runpod.net/v1",
+       model="qwen-ft",
+       temperature=0,
+       api_key="EMPTY",
+       base_url="https://tj72kwahr979ja-7860.proxy.runpod.net/v1",
     )
-
     response_model = control_model
     grader_model = control_model
 
