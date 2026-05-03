@@ -276,14 +276,7 @@ def build_graph_from_documents(docs: List[Document]):
     # -----------------------------
     # OpenAI controls routing, tool calling, grading, and rewriting
     control_model = init_chat_model("gpt-4o-mini", temperature=0)
-
-    # Qwen FT generates ALL final answers
-    answer_model = ChatOpenAI(
-       model="qwen-ft",
-       temperature=0,
-       api_key="EMPTY",
-       base_url="http://127.0.0.1:7860/v1",
-    )
+    answer_model = QwenFTAnswerModel()
     response_model = control_model
     grader_model = control_model
 
